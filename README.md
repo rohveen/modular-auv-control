@@ -6,9 +6,18 @@ A hardware-agnostic control stack for a small ROV/AUV, built simulation-first.
 The same controller, guidance and thruster-allocation code is meant to drive a real vehicle later by swapping one class.
 
 ```
-Guidance (LOS waypoints) -> Controller (cascaded PID) -> Allocator (tau -> 8 thrusters) -> VehicleInterface
-                                                                                          |-- SimulatedVehicle (done)
-                                                                                          `-- RealVehicle     (phase 2)
+Guidance (LOS waypoints)
+        |
+        v
+Controller (cascaded PID)
+        |
+        v
+Allocator (tau -> 8 thrusters)
+        |
+        v
+VehicleInterface
+   |-- SimulatedVehicle (done)
+   `-- RealVehicle      (phase 2)
 ```
 
 ## Run it
