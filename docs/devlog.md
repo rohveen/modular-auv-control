@@ -31,3 +31,8 @@ Newest entries at the bottom. One short entry per working day.
 - Depth and heading loops don't affect each other. Doubling depth kp settles in 2.4 s but saturates a thruster at 40 N.
 - Heading kp x2 beat my baseline (1.9% overshoot, 1.5 s settling), so my heading gains were too conservative.
 - Next: write this up in docs/tuning.md in my own words and try heading kp x2 as the new default.
+
+## 2026-11-23 - Day 14
+
+- Tested heading kp at 4.0, 6.0 and 8.0. A higher kp gave a faster, smoother heading step, but the waypoint mission tracked the path worse. I kept 4.0 as the default. Details are in docs/tuning.md.
+- Next: label the plots with their scenario and add gridlines.
