@@ -56,10 +56,14 @@ def step_scenario():
         ax[1, 1].plot(t, log["u_act"][:, i], label=n, lw=1)
     ax[1, 1].set(ylabel="thrust [N]", xlabel="time [s]", title="Thruster forces")
     ax[1, 1].legend(ncol=2, fontsize=7)
+    ax[0, 0].axhspan(2.46, 2.54, color="green", alpha=0.12, label="±2% band")
+    ax[0, 1].axhspan(58.8, 61.2, color="green", alpha=0.12, label="±2% band")
+    for a in ax.flat:
+        a.minorticks_on()
+        a.grid(which="major", alpha=0.35)
+        a.grid(which="minor", alpha=0.12)
     for a in ax.flat[:3]:
         a.legend()
-        a.grid(alpha=0.3)
-    ax[1, 1].grid(alpha=0.3)
     fig.suptitle("Step response with current (0.18 m/s) + gusts + sensor noise")
     fig.tight_layout()
     fig.savefig(OUT / "step_response.png", dpi=130)
@@ -104,7 +108,10 @@ def waypoint_all():
     ax[2].set(xlabel="time [s]", ylabel="depth [m]", title="Depth along mission")
     for a in ax:
         a.legend()
-        a.grid(alpha=0.3)
+        a.minorticks_on()
+        a.grid(which="major", alpha=0.35)
+        a.grid(which="minor", alpha=0.12)
+    fig.suptitle("Waypoint mission: with current (0.18 m/s) vs no current")
     fig.tight_layout()
     fig.savefig(OUT / "waypoint_mission.png", dpi=130)
     plt.close(fig)
