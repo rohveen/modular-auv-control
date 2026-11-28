@@ -1,19 +1,19 @@
 {
   "step_response": {
     "depth_step_0.5m_to_2.5m": {
-      "rise_time_s": 2.9199999999999933,
-      "overshoot_pct": 0.38457078366738173,
-      "settling_time_s": 4.959999999999961,
-      "steady_state_error": 0.001987990987554262
+      "rise_time_s": 2.6199999999999997,
+      "overshoot_pct": 0.2526518734098593,
+      "settling_time_s": 4.4599999999999715,
+      "steady_state_error": 0.002073075429053617
     },
     "heading_step_0_to_60deg": {
-      "rise_time_s": 1.6200000000000014,
-      "overshoot_pct": 4.4036235282765235,
+      "rise_time_s": 1.6400000000000015,
+      "overshoot_pct": 4.437626699620556,
       "settling_time_s": 7.119999999999916,
-      "steady_state_error": 0.4159491798792054
+      "steady_state_error": 0.41596840811550906
     },
-    "peak_roll_pitch_deg": 4.780441111316048,
-    "peak_thruster_cmd_N": 30.572834231651058
+    "peak_roll_pitch_deg": 4.775570726900413,
+    "peak_thruster_cmd_N": 30.821865196705932
   },
   "waypoint_mission": {
     "with_current": {

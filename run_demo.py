@@ -33,12 +33,12 @@ def step_scenario():
         on = m.t >= t_step
         return Reference(depth=z1 if on else z0, heading=psi1 if on else 0.0), False
 
-    log = run(veh, VehicleController(), ThrusterConfig(), ref_fn, 40.0)
+    kf = DepthKalmanFilter(q=0.001, r=0.05)
+    log = run(veh, VehicleController(), ThrusterConfig(), ref_fn, 40.0,
+              depth_filter=kf)
     t = log["t"]
     heading_deg = np.degrees(np.unwrap(log["eta"][:, 5]))
-    kf = DepthKalmanFilter(q=0.001, r=0.05)
     depth_raw = log["eta"][:, 2]
-    depth_est = np.array([kf.update(z) for z in depth_raw])
     metrics = {
         "depth_step_0.5m_to_2.5m": step_metrics(t, log["eta"][:, 2], z0, z1, t_step),
         "heading_step_0_to_60deg": step_metrics(t, heading_deg, 0.0, 60.0, t_step),
@@ -48,8 +48,7 @@ def step_scenario():
 
     fig, ax = plt.subplots(2, 2, figsize=(11, 7), sharex=True)
     ax[0, 0].plot(t, log["ref_depth"], "k--", label="reference")
-    ax[0, 0].plot(t, depth_raw, color="tab:blue", alpha=0.4, lw=1, label="raw depth")
-    ax[0, 0].plot(t, depth_est, color="tab:blue", lw=1.8, label="filtered depth")
+    ax[0, 0].plot(t, depth_raw, label="depth (filtered)")
     ax[0, 0].set(ylabel="depth [m]", title="Depth step")
     ax[0, 1].plot(t, np.degrees(log["ref_heading"]), "k--", label="reference")
     ax[0, 1].plot(t, heading_deg, label="heading")

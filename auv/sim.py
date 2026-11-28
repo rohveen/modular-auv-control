@@ -2,13 +2,15 @@
 import numpy as np
 
 
-def run(vehicle, controller, allocator, ref_fn, t_max):
+def run(vehicle, controller, allocator, ref_fn, t_max, depth_filter=None):
     """ref_fn(measurement) -> (Reference, done). Returns a dict of logged arrays."""
     log = {k: [] for k in ["t", "eta", "nu", "ref_depth", "ref_heading", "ref_surge",
                            "tau", "u_cmd", "u_act"]}
     dt = vehicle.dt
     while vehicle.t < t_max:
         meas = vehicle.read_state()
+        if depth_filter is not None:
+            meas.eta[2] = depth_filter.update(meas.eta[2])
         ref, done = ref_fn(meas)
         tau = controller.update(meas, ref, dt)
         u = allocator.allocate(tau)
