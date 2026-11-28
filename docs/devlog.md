@@ -36,3 +36,27 @@ Newest entries at the bottom. One short entry per working day.
 
 - Tested heading kp at 4.0, 6.0 and 8.0. A higher kp gave a faster, smoother heading step, but the waypoint mission tracked the path worse. I kept 4.0 as the default. Details are in docs/tuning.md.
 - Next: label the plots with their scenario and add gridlines.
+
+## 2026-11-28 - Day 16
+
+Added a scalar Kalman filter for depth estimation in `auv/estimator.py`.
+The filter runs a predict-update cycle each timestep, blending the noisy
+sensor readings with a constant-depth process model using Q=0.001 and R=0.05.
+
+Integrated the filter into `sim.run()` through an optional `depth_filter`
+argument, allowing the controller to receive filtered depth estimates
+instead of raw measurements. Raw depth is now logged separately so both
+signals can be compared on the same plot.
+
+To test the effect, sensor noise was temporarily increased to 0.15 m sigma.
+Without filtering, settling time increased from ~5 s to 36 s due to noise
+amplification in the PID derivative term. With filtering enabled at
+realistic noise levels (0.01 m sigma), settling time holds at 4.46 s and
+overshoot drops to 0.25%.
+
+The step response plot now shows raw depth (faint blue) and filtered depth
+(orange) on the same axes. In the settled region inside the ±2% band, the
+raw signal shows visible measurement noise while the filtered line is
+noticeably smoother.
+
+Next: compare filter lag vs noise rejection at different Q/R ratios.

@@ -48,7 +48,8 @@ def step_scenario():
 
     fig, ax = plt.subplots(2, 2, figsize=(11, 7), sharex=True)
     ax[0, 0].plot(t, log["ref_depth"], "k--", label="reference")
-    ax[0, 0].plot(t, depth_raw, label="depth (filtered)")
+    ax[0, 0].plot(t, log["depth_raw"], color="tab:blue", alpha=0.35, lw=1, label="raw depth")
+    ax[0, 0].plot(t, depth_raw, color="tab:orange", lw=1.8, label="filtered depth")
     ax[0, 0].set(ylabel="depth [m]", title="Depth step")
     ax[0, 1].plot(t, np.degrees(log["ref_heading"]), "k--", label="reference")
     ax[0, 1].plot(t, heading_deg, label="heading")
