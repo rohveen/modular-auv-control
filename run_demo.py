@@ -17,6 +17,7 @@ from auv.interfaces import Reference
 from auv.sim import cross_track_error, run, step_metrics
 from auv.thrusters import NAMES, ThrusterConfig
 from auv.vehicle import SimulatedVehicle
+from auv.estimator import DepthKalmanFilter
 
 OUT = Path(__file__).parent / "results"
 OUT.mkdir(exist_ok=True)
@@ -35,6 +36,9 @@ def step_scenario():
     log = run(veh, VehicleController(), ThrusterConfig(), ref_fn, 40.0)
     t = log["t"]
     heading_deg = np.degrees(np.unwrap(log["eta"][:, 5]))
+    kf = DepthKalmanFilter(q=0.001, r=0.05)
+    depth_raw = log["eta"][:, 2]
+    depth_est = np.array([kf.update(z) for z in depth_raw])
     metrics = {
         "depth_step_0.5m_to_2.5m": step_metrics(t, log["eta"][:, 2], z0, z1, t_step),
         "heading_step_0_to_60deg": step_metrics(t, heading_deg, 0.0, 60.0, t_step),
@@ -44,7 +48,8 @@ def step_scenario():
 
     fig, ax = plt.subplots(2, 2, figsize=(11, 7), sharex=True)
     ax[0, 0].plot(t, log["ref_depth"], "k--", label="reference")
-    ax[0, 0].plot(t, log["eta"][:, 2], label="depth")
+    ax[0, 0].plot(t, depth_raw, color="tab:blue", alpha=0.4, lw=1, label="raw depth")
+    ax[0, 0].plot(t, depth_est, color="tab:blue", lw=1.8, label="filtered depth")
     ax[0, 0].set(ylabel="depth [m]", title="Depth step")
     ax[0, 1].plot(t, np.degrees(log["ref_heading"]), "k--", label="reference")
     ax[0, 1].plot(t, heading_deg, label="heading")
